@@ -1,0 +1,217 @@
+.add-policy-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  position: absolute;
+  top: 102px;
+  left: 175px;
+}
+
+.policy-search input {
+  width: 667px;
+  height: 40px;
+  padding: 5px 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.policy-search input:focus,
+.policy-search input:hover {
+  outline: none;
+  border-color: #f36d22;
+  box-shadow: 0 0 8px rgba(243, 109, 34, 0.5);
+}
+
+.policy-add-client button {
+  width: 250px;
+  height: 40px;
+  background-color: #f36d22;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 0 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.policy-add-client button:hover {
+  background-color: #d55c1b;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.policy_card {
+  top: 31px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  left: 118px;
+}
+
+/* Styling the list of policies */
+.policy-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 170px auto;
+}
+
+.policy-card-1 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 47px;
+  justify-content: center;
+}
+
+/* Styling for each individual policy card */
+.policy-subcard {
+  width: 300px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.policy-subcard:hover {
+  transform: scale(1.05);
+}
+
+.policy-subcard-img-top {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card_body {
+  padding: 15px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.card_text {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.card_footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 12px;
+}
+
+.btn_danger {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn_danger:hover {
+  background-color: #c9302c;
+}
+
+.policy-edit-btn-hover {
+  background-color: #11101d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.policy-edit-btn-hover:hover {
+  background-color: #2e2e2e;
+}
+
+/* Edit popup styling */
+.policycard-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.policycard-popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.policycard-form-group {
+  margin-bottom: 15px;
+}
+
+.policycard-form-group label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.policycard-form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.policycard-popup-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.policycard-popup-footer .btn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Toast notifications */
+.Toastify__toast-container {
+  z-index: 9999;
+}

@@ -1,0 +1,208 @@
+/* Fieldset styling */
+#insuranceForm fieldset {
+  border: 2px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+#insuranceForm legend {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #444;
+}
+
+/* Form labels and inputs */
+#insuranceForm label {
+  font-size: 1em;
+  margin-bottom: 5px;
+  display: block;
+}
+
+#insuranceForm input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+#insuranceForm textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+#insuranceForm input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+#insuranceForm button {
+  width: 100%;
+  background-color: #11101d;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#insuranceForm button:hover {
+  background-color: #1d1b31;
+}
+*/
+  
+  /* Flexbox styling for address inputs */
+  .address-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.address-inputs .input-group {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+}
+
+.address-inputs .input-group label {
+  margin-bottom: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+#insuranceForm input[type="checkbox"] {
+  width: auto;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.agreement label {
+  font-size: 1em;
+  color: #444;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.agreement {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.agreement:hover input[type="checkbox"] {
+  background-color: #f0f0f0;
+}
+
+.agreement input[type="checkbox"]:focus {
+  outline: 2px solid #4caf50;
+  outline-offset: 2px;
+}
+
+.agreement input[type="checkbox"]:checked {
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+
+.hello::after {
+  content: " I agree to the terms and conditions.";
+}
+
+br {
+  margin-bottom: 5px;
+}
+
+/* Small screen adjustments */
+@media (max-width: 768px) {
+  .address-inputs {
+    width: 100%;
+  }
+
+  .input-group {
+    width: 100%;
+  }
+}
+
+/* multy */
+
+.multi-step-form {
+  max-width: 500px;
+  color: white;
+  margin: 78px auto;
+  font-family: Arial, sans-serif;
+}
+
+.progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  height: 10px;
+  margin-bottom: 20px;
+}
+
+.progress {
+  background-color: #4caf50;
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}
+
+fieldset {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+legend {
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input,
+select,
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.navigation-buttons button {
+  background-color: #4caf50;
+  margin: 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.navigation-buttons button:hover {
+  background-color: #45a049;
+}
+
+.navigation-buttons .error {
+  color: red;
+  font-weight: bold;
+}
