@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import "./ClientDetails.css";
+import { useEffect, useState, Fragment } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ClientDetails() {
-  const [clients, setClients] = useState([]);
-  const [expandedRows, setExpandedRows] = useState({});
-  const [editPopupOpen, setEditPopupOpen] = useState(false);
-  const [currentClient, setCurrentClient] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+import type { Client, UpdatedClientResponse } from "../types/Client";
 
+export default function ClientDetails() {
+  const [clients, setClients] = useState<Client[]>([]);
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
+  const [editPopupOpen, setEditPopupOpen] = useState<boolean>(false);
+  const [currentClient, setCurrentClient] = useState<Client | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,46 +19,61 @@ export default function ClientDetails() {
   const fetchClientData = async () => {
     try {
       const response = await fetch("http://localhost:300/client");
-      if (!response.ok) throw new Error("Failed to fetch client data.");
-      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch client data.");
+      }
+
+      const data: Client[] = await response.json();
+
       setClients(data);
     } catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     }
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toISOString().split("T")[0];
+
+    return new Date(dateString).toISOString().split("T")[0];
   };
 
-  const toggleRow = (clientId) => {
+  const toggleRow = (clientId: string) => {
     setExpandedRows((prevState) => ({
       ...prevState,
       [clientId]: !prevState[clientId],
     }));
   };
 
-  const handleDelete = async (clientId) => {
+  const handleDelete = async (clientId: string) => {
     try {
       const response = await fetch(`http://localhost:300/client/${clientId}`, {
         method: "DELETE",
       });
-      if (!response.ok) throw new Error("Failed to delete client.");
-      setClients(clients.filter((client) => client._id !== clientId));
+
+      if (!response.ok) {
+        throw new Error("Failed to delete client.");
+      }
+
+      setClients((prev) => prev.filter((client) => client._id !== clientId));
     } catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     }
   };
 
-  const handleEditClick = (client) => {
+  const handleEditClick = (client: Client) => {
     setCurrentClient(client);
     setEditPopupOpen(true);
   };
 
-  const handleUpdate = async (event) => {
+  const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!currentClient) return;
 
     try {
       const response = await fetch(
@@ -68,37 +84,43 @@ export default function ClientDetails() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(currentClient),
-        }
+        },
       );
 
-      if (!response.ok) throw new Error("Failed to update client.");
+      if (!response.ok) {
+        throw new Error("Failed to update client.");
+      }
 
-      const updatedClient = await response.json();
-
+      const updatedClient: UpdatedClientResponse = await response.json();
       setClients((prevClients) =>
         prevClients.map((client) =>
           client._id === updatedClient.updatedClient._id
             ? updatedClient.updatedClient
-            : client
-        )
+            : client,
+        ),
       );
 
       setEditPopupOpen(false);
       setCurrentClient(null);
     } catch (error) {
-      console.error(error.message);
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!currentClient) return;
+
     const { name, value } = e.target;
-    setCurrentClient((prevState) => ({
-      ...prevState,
+
+    setCurrentClient({
+      ...currentClient,
       [name]: value,
-    }));
+    });
   };
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
@@ -107,9 +129,8 @@ export default function ClientDetails() {
       `${client.firstName} ${client.lastName}`
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) ||
-      client.email.toLowerCase().includes(searchTerm.toLowerCase())
+      client.email.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
   return (
     <>
       <div className="table">
@@ -123,6 +144,7 @@ export default function ClientDetails() {
                 onChange={handleSearchChange}
               />
             </div>
+
             <div className="add-client">
               <button onClick={() => navigate("/client")}>
                 Add Information
@@ -131,6 +153,7 @@ export default function ClientDetails() {
           </div>
 
           <h2>Client Information</h2>
+
           <table>
             <thead>
               <tr>
@@ -142,36 +165,45 @@ export default function ClientDetails() {
                 <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
               {filteredClients.length > 0 ? (
                 filteredClients.map((client) => (
-                  <React.Fragment key={client._id}>
+                  <Fragment key={client._id}>
                     <tr>
                       <td>
                         {client.firstName} {client.lastName}
                       </td>
+
                       <td>{formatDate(client.dob)}</td>
+
                       <td>{client.gender}</td>
+
                       <td>{client.phone}</td>
+
                       <td>{client.email}</td>
+
                       <td>
                         <button onClick={() => toggleRow(client._id)}>
                           {expandedRows[client._id] ? "Show Less" : "Show More"}
                         </button>
                       </td>
                     </tr>
+
                     {expandedRows[client._id] && (
                       <tr>
-                        <td colSpan="6">
+                        <td colSpan={6}>
                           <div className="expanded-content">
                             <p>
                               <strong>Address:</strong> {client.streetAddress},{" "}
                               {client.city}, {client.state} {client.zipCode}
                             </p>
+
                             <div className="action-buttons">
                               <button onClick={() => handleEditClick(client)}>
                                 Edit
                               </button>
+
                               <button onClick={() => handleDelete(client._id)}>
                                 Delete
                               </button>
@@ -180,11 +212,11 @@ export default function ClientDetails() {
                         </td>
                       </tr>
                     )}
-                  </React.Fragment>
+                  </Fragment>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9">No client data available</td>
+                  <td colSpan={6}>No client data available</td>
                 </tr>
               )}
             </tbody>
@@ -196,6 +228,7 @@ export default function ClientDetails() {
         <div className="edit-popup">
           <form onSubmit={handleUpdate}>
             <h3>Edit Client Detail</h3>
+
             <label>
               First Name:
               <input
@@ -205,6 +238,7 @@ export default function ClientDetails() {
                 onChange={handleInputChange}
               />
             </label>
+
             <label>
               Last Name:
               <input
@@ -214,6 +248,7 @@ export default function ClientDetails() {
                 onChange={handleInputChange}
               />
             </label>
+
             <label>
               Phone:
               <input
@@ -223,6 +258,7 @@ export default function ClientDetails() {
                 onChange={handleInputChange}
               />
             </label>
+
             <label>
               Email:
               <input
@@ -232,6 +268,7 @@ export default function ClientDetails() {
                 onChange={handleInputChange}
               />
             </label>
+
             <div className="adress_input">
               <label>
                 Street Address:
@@ -242,6 +279,7 @@ export default function ClientDetails() {
                   onChange={handleInputChange}
                 />
               </label>
+
               <label>
                 City:
                 <input
@@ -252,6 +290,7 @@ export default function ClientDetails() {
                 />
               </label>
             </div>
+
             <div className="adress_input">
               <label>
                 State:
@@ -262,6 +301,7 @@ export default function ClientDetails() {
                   onChange={handleInputChange}
                 />
               </label>
+
               <label>
                 ZIP Code:
                 <input
@@ -272,9 +312,19 @@ export default function ClientDetails() {
                 />
               </label>
             </div>
+
             <div className="popup-actions">
               <button type="submit">Update</button>
-              <button onClick={() => setEditPopupOpen(false)}>Cancel</button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setEditPopupOpen(false);
+                  setCurrentClient(null);
+                }}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>

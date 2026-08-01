@@ -1,30 +1,41 @@
-import React, { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ClientInfoForm.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+interface CategoryPolicyFormData {
+  policyType: string;
+  policyDescription: string;
+  policyAmount: number;
+  coverageDuration: number;
+}
+
 export default function CategoryPolicyForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CategoryPolicyFormData>({
     policyType: "",
     policyDescription: "",
-    policyAmount: "",
-    coverageDuration: "",
+    policyAmount: 0,
+    coverageDuration: 0,
   });
 
   const navigate = useNavigate();
 
-  // Handle input changes
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]:
+        name === "policyAmount" || name === "coverageDuration"
+          ? Number(value)
+          : value,
     }));
   };
 
-  // Submit logic
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (
@@ -46,23 +57,23 @@ export default function CategoryPolicyForm() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       if (!response.ok) {
-        throw toast.error("Failed to submit client data.");
+        throw new Error("Failed to submit policy.");
       }
 
-      toast.success("Client information submitted successfully!");
+      toast.success("Policy submitted successfully!");
+
       setTimeout(() => {
         navigate("/category-policy");
-      }, 4000);
+      }, 3000);
     } catch (error) {
+      console.error(error);
       toast.error("Error submitting the form. Please try again.");
     }
   };
-
-  // Calculate progress bar width
 
   return (
     <div
@@ -85,13 +96,14 @@ export default function CategoryPolicyForm() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          className="Toastify"
         />
+
         <h2>Policy Information Form</h2>
 
         <form onSubmit={handleSubmit}>
           <fieldset>
             <legend>Policy Category</legend>
+
             <label>
               Policy Type:
               <select
@@ -108,14 +120,17 @@ export default function CategoryPolicyForm() {
                 <option value="travel">Travel Insurance</option>
               </select>
             </label>
-            <label htmlFor="policyDescription">
-              Policy Description :
+
+            <label>
+              Policy Description:
               <textarea
                 name="policyDescription"
                 value={formData.policyDescription}
                 onChange={handleInputChange}
+                required
               />
             </label>
+
             <label>
               Policy Amount:
               <input
@@ -126,6 +141,7 @@ export default function CategoryPolicyForm() {
                 required
               />
             </label>
+
             <label>
               Coverage Duration (Years):
               <input
@@ -137,6 +153,7 @@ export default function CategoryPolicyForm() {
               />
             </label>
           </fieldset>
+
           <div className="navigation-buttons">
             <button type="submit">Submit</button>
           </div>

@@ -1,4 +1,5 @@
-import { useContext, CSSProperties } from "react";
+import type { CSSProperties } from "react";
+import { useTheme } from "./context/ThemeContext";
 import "./App.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -15,10 +16,8 @@ import CategoryPolicyForm from "./components/CategoryPolicyForm";
 import PolicyForm from "./components/PolicyForm";
 import PolicyCard from "./components/policyCard";
 
-import { ThemeContext } from "./context/ThemeContext";
-
 function App() {
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode } = useTheme();
 
   const appStyle: CSSProperties = {
     backgroundColor: isDarkMode ? "#11101d" : "#252222",
