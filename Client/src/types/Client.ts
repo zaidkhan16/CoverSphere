@@ -19,3 +19,8 @@ export interface Client {
 export interface UpdatedClientResponse {
   updatedClient: Client;
 }
+
+/**
+ * Form data for creating a client
+ */
+export type ClientFormData = Omit<Client, "_id">;

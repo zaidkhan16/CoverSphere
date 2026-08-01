@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import type { ChangeEvent, CSSProperties } from "react";
+import type { ClientFormData } from "../types/Client";
 import { useNavigate } from "react-router-dom";
+
 import "./ClientInfoForm.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ClientForm() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [currentStep, setCurrentStep] = useState<number>(1);
+
+  const [formData, setFormData] = useState<ClientFormData>({
     firstName: "",
     lastName: "",
     dob: "",
@@ -21,17 +25,26 @@ export default function ClientForm() {
 
   const navigate = useNavigate();
 
-  // Handle input changes
-  const handleInputChange = (e) => {
+  const containerStyle: CSSProperties = {
+    position: "relative",
+    display: "flex",
+    top: "10px",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
 
-  // Submit logic
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -43,31 +56,36 @@ export default function ClientForm() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-        }
+        },
       );
 
       if (!response.ok) {
-        throw toast.error("Failed to submit client data.");
+        throw new Error("Failed to submit client.");
       }
 
       toast.success("Client information submitted successfully!");
+
       setTimeout(() => {
         navigate("/client-detail");
-      }, 5000);
+      }, 3000);
     } catch (error) {
-      toast.error("Error submitting the form. Please try again.");
+      console.error(error);
+
+      toast.error("Error submitting the form.");
     }
   };
 
   const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, 2));
+
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
 
-  const renderStepContent = () => {
+  const renderStepContent = (): JSX.Element | null => {
     switch (currentStep) {
       case 1:
         return (
           <fieldset>
             <legend>Step 1: Personal Information</legend>
+
             <label>
               First Name:
               <input
@@ -78,6 +96,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               Last Name:
               <input
@@ -88,6 +107,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               Date of Birth:
               <input
@@ -98,6 +118,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               Gender:
               <select
@@ -107,17 +128,22 @@ export default function ClientForm() {
                 required
               >
                 <option value="">Select Gender</option>
+
                 <option value="male">Male</option>
+
                 <option value="female">Female</option>
+
                 <option value="other">Other</option>
               </select>
             </label>
           </fieldset>
         );
+
       case 2:
         return (
           <fieldset>
             <legend>Step 2: Contact Information</legend>
+
             <label>
               Phone Number:
               <input
@@ -128,6 +154,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               Email Address:
               <input
@@ -138,6 +165,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               Street Address:
               <input
@@ -148,6 +176,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               City:
               <input
@@ -158,6 +187,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               State:
               <input
@@ -168,6 +198,7 @@ export default function ClientForm() {
                 required
               />
             </label>
+
             <label>
               Zip Code:
               <input
@@ -186,18 +217,10 @@ export default function ClientForm() {
     }
   };
 
-  const progress = (currentStep / 2) * 100;
+  const progress: number = (currentStep / 2) * 100;
 
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        top: "10px",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div style={containerStyle}>
       <div className="multi-step-form">
         <ToastContainer
           position="top-right"
@@ -211,12 +234,26 @@ export default function ClientForm() {
           pauseOnHover
           className="Toastify"
         />
+
         <h2>Client Information Form</h2>
+
         <div className="progress-bar">
-          <div className="progress" style={{ width: `${progress}%` }}></div>
+          <div
+            className="progress"
+            style={{
+              width: `${progress}%`,
+            }}
+          />
         </div>
-        <form onSubmit={handleSubmit} style={{ width: "400px" }}>
+
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            width: "400px",
+          }}
+        >
           {renderStepContent()}
+
           <div className="navigation-buttons">
             {currentStep > 1 && (
               <button type="button" onClick={prevStep}>
